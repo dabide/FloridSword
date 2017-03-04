@@ -14,7 +14,7 @@ fi
 
 /opt/puppetlabs/bin/puppet module install saz-dnsmasq
 
-if [ $1 != '--skip-puppet' ]; then
+if [ $1 -ne '--skip-puppet' ]; then
     /opt/puppetlabs/bin/puppet apply --debug --verbose -environmentpath /opt/floridsword/setup/environments/ --environment production
 fi
 
