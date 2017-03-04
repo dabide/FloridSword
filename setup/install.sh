@@ -15,7 +15,7 @@ fi
 /opt/puppetlabs/bin/puppet module install saz-dnsmasq
 
 if [ $1 -ne '--skip-puppet' ]; then
-    /opt/puppetlabs/bin/puppet apply --debug --verbose -environmentpath /opt/floridsword/setup/environments/ --environment production
+    /opt/puppetlabs/bin/puppet apply --no-color --debug --verbose -environmentpath /opt/floridsword/setup/environments/ --environment production
 fi
 
 # Echo resetting rc.local if changed
