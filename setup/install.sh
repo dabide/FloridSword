@@ -1,7 +1,7 @@
 #! /bin/bash
 cd /opt/floridsword/setup
 
-dpkg -l puppetlabs-release > /dev/null 2>&1
+dpkg -l puppetlabs-release-pc1 > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     wget -O /tmp/puppetlabs.deb https://apt.puppetlabs.com/puppetlabs-release-pc1-jessie.deb
     sudo dpkg -i /tmp/puppetlabs.deb
