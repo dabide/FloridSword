@@ -6,7 +6,10 @@ if [ $? -ne 0 ]; then
     wget -O /tmp/puppetlabs.deb https://apt.puppetlabs.com/puppetlabs-release-pc1-jessie.deb
     sudo dpkg -i /tmp/puppetlabs.deb
     rm /tmp/puppetlabs.deb
+fi
 
+dpkg -l puppet-agent > /dev/null 2>&1
+if [ $? -ne 0 ]; then
     sudo apt-get update
 
     apt-get install puppet-agent -y
