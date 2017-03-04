@@ -19,4 +19,4 @@ if [ $1 != '--skip-puppet' ]; then
 fi
 
 # Echo resetting rc.local if changed
-sed -i 's_sh /opt/floridsword/setup/install.sh_exit 0_' /etc/rc.local
+sed -i 's_sh /opt/floridsword/setup/install\.sh.*$_exit 0_' /etc/rc.local
