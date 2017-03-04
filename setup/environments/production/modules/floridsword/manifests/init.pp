@@ -2,7 +2,7 @@
 #
 #
 class floridsword {
-   package { 'shorewall':
+    package { 'shorewall':
         ensure => latest,
     }
 
