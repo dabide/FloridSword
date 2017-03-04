@@ -21,7 +21,7 @@ if [ "$1" != "--skip-puppet" ]; then
     /opt/puppetlabs/bin/puppet apply --color=no --debug --verbose \
     --environmentpath /opt/floridsword/setup/environments/ \
     --environment production \
-    /opt/floridsword/setup/setup/environments/production/manifests/site.pp
+    /opt/floridsword/setup/environments/production/manifests/site.pp
 fi
 
 # Echo resetting rc.local if changed
