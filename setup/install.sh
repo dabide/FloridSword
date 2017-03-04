@@ -1,6 +1,4 @@
 #! /bin/bash
-set -e
-
 cd /opt/floridsword/setup
 
 dpkg -l puppetlabs-release > /dev/null 2>&1
