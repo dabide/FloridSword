@@ -28,8 +28,8 @@ class floridsword {
     }
     ->
     exec { 'install_dotnet':
-        command => "/usr/bin/curl -sSL https://go.microsoft.com/fwlink/?LinkID=835021 | /bin/tar zx -C /opt/dotnet",
-        creates => "/opt/dotnet/dotnet",
+        command => "/usr/bin/curl -sSL https://go.microsoft.com/fwlink/?linkid=841689 | /bin/tar zx -C /opt/dotnet",
+        creates => "/opt/dotnet/sdk/1.0.0-rc4-004771",
         require => [ Package['curl'], Package['libunwind8'], Package['gettext'] ],
     }
     ->

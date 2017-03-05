@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceStack;
+using Autofac;
+using System;
+using Autofac.Extensions.DependencyInjection;
+using FloridSword.SystemService.Setup;
 
 namespace FloridSword.SystemService
 {
@@ -20,7 +24,7 @@ namespace FloridSword.SystemService
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                //builder.AddUserSecrets();
             }
 
             builder.AddEnvironmentVariables();
@@ -29,13 +33,23 @@ namespace FloridSword.SystemService
 
             LicenseUtils.RegisterLicense(Configuration["servicestack:license"]);
         }
+
+        public IContainer ApplicationContainer { get; private set; }
+
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var builder = new ContainerBuilder();
 
+            builder.RegisterModule<SystemServiceModule>();
+            builder.Populate(services);
+
+            ApplicationContainer = builder.Build();
+
+            return new AutofacServiceProvider(ApplicationContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
