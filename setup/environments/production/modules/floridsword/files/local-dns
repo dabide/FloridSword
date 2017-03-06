@@ -1,2 +1,0 @@
-interface=eth1
-dhcp-range=10.123.234.100,10.123.234.199,12h

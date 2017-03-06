@@ -1,12 +1,10 @@
-using System.IO;
-
 namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
-    internal abstract class ShoreWallFile
+    internal abstract class ShoreWallFile : ConfigFile
     {
-        public void Write(string configFolder)
+        protected override string GetFileName()
         {
-            File.WriteAllText(Path.Combine(configFolder, GetType().Name.ToLowerInvariant()), ToString());
+            return GetType().Name.ToLowerInvariant();
         }
     }
 }

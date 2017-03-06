@@ -10,9 +10,9 @@ class floridsword {
         ensure => installed,
     }
 
-    dnsmasq::conf { 'local-dns':
+    dnsmasq::conf { 'base_config':
         ensure => present,
-        source => 'puppet:///modules/floridsword/local-dns',
+        source => 'puppet:///modules/floridsword/base-config',
     }
 
     package { 'curl':

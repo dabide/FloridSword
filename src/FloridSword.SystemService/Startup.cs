@@ -58,7 +58,7 @@ namespace FloridSword.SystemService
         {
             loggerFactory.AddConsole();
 
-            Settings.Load();
+            ApplicationContainer.Resolve<ISystemConfigurator>().Load();
 
             if (env.IsDevelopment())
             {
