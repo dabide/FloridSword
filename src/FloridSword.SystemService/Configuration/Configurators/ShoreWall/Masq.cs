@@ -5,7 +5,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class Masq : ShoreWallFile
     {
-        public List<MasqEntry> MasqEntries { get; } = new List<MasqEntry>();
+        public List<MasqEntry> MasqEntries { get; set; } = new List<MasqEntry>();
 
         public void Add(string destInterface, string sourceInterface)
         {

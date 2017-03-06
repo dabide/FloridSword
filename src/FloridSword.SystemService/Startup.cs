@@ -8,6 +8,7 @@ using ServiceStack;
 using Autofac;
 using System;
 using Autofac.Extensions.DependencyInjection;
+using FloridSword.SystemService.Configuration;
 using FloridSword.SystemService.Setup;
 
 namespace FloridSword.SystemService
@@ -56,6 +57,8 @@ namespace FloridSword.SystemService
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
+
+            Settings.Load();
 
             if (env.IsDevelopment())
             {

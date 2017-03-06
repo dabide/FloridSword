@@ -5,14 +5,15 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class Interfaces : ShoreWallFile
     {
-        public List<InterfaceEntry> InterfaceEntries { get; } = new List<InterfaceEntry>();
+        public List<InterfaceEntry> InterfaceEntries { get; set;  } = new List<InterfaceEntry>();
 
-        public void Add(string name, bool external)
+        public void Add(string zone, string name, bool external)
         {
             InterfaceEntries.Add(new InterfaceEntry
             {
+                Zone = zone,
                 Interface = name,
-                Options = external ? "tcpflags,dhcp,nosmurfs,routefilter,logmartians,sourceroute=0" : "tcpflags,nosmurfs,routefilter,logmartians"
+                Options = external ? "tcpflags,dhcp,nosmurfs,routefilter,logmartians,sourceroute=0" : "tcpflags,dhcp,nosmurfs,routefilter,logmartians"
             });
         }
 
@@ -20,7 +21,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("###############################################################################");
-            stringBuilder.AppendLine("? FORMAT 2");
+            stringBuilder.AppendLine("?FORMAT 2");
             stringBuilder.AppendLine("###############################################################################");
             stringBuilder.AppendLine("#ZONE\tINTERFACE\tOPTIONS");
         

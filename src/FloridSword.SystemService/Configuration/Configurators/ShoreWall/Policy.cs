@@ -5,9 +5,9 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class Policy : ShoreWallFile
     {
-        public List<PolicyEntry> PolicyEntries { get; } = new List<PolicyEntry>();
+        public List<PolicyEntry> PolicyEntries { get; set; } = new List<PolicyEntry>();
 
-        public void Add(string source, string dest, PolicyType policy, LogLevel logLevel)
+        public void Add(string source, string dest, PolicyType policy, LogLevel? logLevel = null)
         {
             PolicyEntries.Add(new PolicyEntry
             {
@@ -27,28 +27,12 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
             {
                 stringBuilder.AppendLine(policyEntry.ToString());
             }
-        
+            stringBuilder.AppendLine("# THE FOLLOWING POLICY MUST BE LAST");
+            stringBuilder.AppendLine(
+                new PolicyEntry {Source = "all", Dest = "all", Policy = PolicyType.Reject, LogLevel = LogLevel.Info}.ToString());
+            
             return stringBuilder.ToString();
         }
-    }
-
-    internal class PolicyType
-    {
-        private readonly string _name;
-
-        private PolicyType(string name)
-        {
-            _name = name;
-        }
-
-        public override string ToString()
-        {
-            return _name;
-        }
-
-        public static PolicyType Drop { get; } = new PolicyType("DROP");
-        public static PolicyType Reject { get; } = new PolicyType("REJECT");
-        public static PolicyType Accept { get; } = new PolicyType("ACCEPT");
     }
 
     internal class PolicyEntry
@@ -56,12 +40,12 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
         public string Source { get; set; }
         public string Dest { get; set; }
         public PolicyType Policy { get; set; }
-        public LogLevel LogLevel { get; set; }
+        public LogLevel? LogLevel { get; set; }
         public string LimitBurst { get; set; }
 
         public override string ToString()
         {
-            return $"{Source}\t{Dest}\t{Policy}\t{LogLevel.ToString().ToLowerInvariant()}\t{LimitBurst}";
+            return $"{Source}\t{Dest}\t{Policy.ToString().ToUpperInvariant()}\t{LogLevel.ToString().ToLowerInvariant()}\t{LimitBurst}";
         }
     }
 }

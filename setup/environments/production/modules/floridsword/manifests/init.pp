@@ -2,8 +2,12 @@
 #
 #
 class floridsword {
+    package { 'ipset':
+        ensure => installed,        
+    }
+
     package { 'shorewall':
-        ensure => latest,
+        ensure => installed,
     }
 
     dnsmasq::conf { 'local-dns':

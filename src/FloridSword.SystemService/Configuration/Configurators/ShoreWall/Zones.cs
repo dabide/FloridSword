@@ -5,7 +5,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class Zones : ShoreWallFile
     {
-        public List<ZoneEntry> ZoneEntries { get; } = new List<ZoneEntry>();
+        public List<ZoneEntry> ZoneEntries { get; set; } = new List<ZoneEntry>();
 
         public void Add(string name)
         {

@@ -6,7 +6,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class Rules : ShoreWallFile
     {
-        public List<RuleEntry> RuleEntries { get; } = new List<RuleEntry>();
+        public List<RuleEntry> RuleEntries { get; set; } = new List<RuleEntry>();
 
         public void Add(Section section, string action, string source, string dest, string protocol)
         {

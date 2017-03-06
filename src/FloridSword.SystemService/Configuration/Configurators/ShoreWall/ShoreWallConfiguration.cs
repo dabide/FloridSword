@@ -7,28 +7,36 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
 {
     internal class ShoreWallConfiguration
     {
-        const string ConfigFolder = "/etc/shorewall";
+        private const string ConfigFolder = "/etc/shorewall";
 
-        public Interfaces Interfaces { get; } = new Interfaces();
-        public Zones Zones { get; } = new Zones();
-        public Policy Policy { get; } = new Policy();
-        public Rules Rules { get; } = new Rules();
-        public Masq Masq { get; } = new Masq();
+        public ShoreWallConfiguration()
+        {
+            Init = new Init();
+            Interfaces = new Interfaces();
+            Zones = new Zones();
+            Policy = new Policy();
+            Rules = new Rules();
+            Masq = new Masq();
+        }
+
+        public Init Init { get; set; }
+        public Interfaces Interfaces { get; set; }
+        public Zones Zones { get; set; }
+        public Policy Policy { get; set; }
+        public Rules Rules { get; set; }
+        public Masq Masq { get; set; }
 
         public void Apply()
         {
-            var shoreWallConfPath = $"{ConfigFolder}/shorewall.conf";
-            var shoreWallConf = File.ReadAllText(shoreWallConfPath);
-            shoreWallConf = Regex.Replace(shoreWallConf, @"IP_FORWARDING=.*$", "IP_FORWARDING=Yes", RegexOptions.Multiline);
-            File.WriteAllText(shoreWallConfPath, shoreWallConf);
+            Write();
 
-            Interfaces.Write(ConfigFolder);
-            Zones.Write(ConfigFolder);
-            Policy.Write(ConfigFolder);
-            Rules.Write(ConfigFolder);
-            Masq.Write(ConfigFolder);
+            // TODO: Enable when sure that it'll work
+            //ReloadShoreWall();
+        }
 
-            Process process = new Process
+        private static void ReloadShoreWall()
+        {
+            var process = new Process
             {
                 StartInfo =
                 {
@@ -42,16 +50,31 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
             {
                 process.Start();
 
-                StreamReader reader = process.StandardOutput;
-                string output = reader.ReadToEnd();
+                var reader = process.StandardOutput;
+                var output = reader.ReadToEnd();
 
                 process.WaitForExit();
             }
 
             if (process.ExitCode != 0)
-            {
                 throw new Exception("Couldn't reload ShoreWall");
-            }
+        }
+
+        private void Write()
+        {
+            var shoreWallConfPath = $"{ConfigFolder}/shorewall.conf";
+            var shoreWallConf = File.ReadAllText(shoreWallConfPath);
+            shoreWallConf = Regex.Replace(shoreWallConf, @"IP_FORWARDING=.*$", "IP_FORWARDING=Yes",
+                RegexOptions.Multiline);
+            shoreWallConf = Regex.Replace(shoreWallConf, @"SAVE_IPSETS=.*$", "SAVE_IPSETS=Yes", RegexOptions.Multiline);
+            File.WriteAllText(shoreWallConfPath, shoreWallConf);
+
+            Init.Write(ConfigFolder);
+            Interfaces.Write(ConfigFolder);
+            Zones.Write(ConfigFolder);
+            Policy.Write(ConfigFolder);
+            Rules.Write(ConfigFolder);
+            Masq.Write(ConfigFolder);
         }
     }
 }
