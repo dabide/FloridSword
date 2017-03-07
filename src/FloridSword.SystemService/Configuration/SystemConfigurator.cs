@@ -3,6 +3,7 @@ using System.IO;
 using FloridSword.SystemService.Configuration.Configurators.DnsMasq;
 using FloridSword.SystemService.Configuration.Configurators.ShoreWall;
 using ServiceStack;
+using ServiceStack.Text;
 
 namespace FloridSword.SystemService.Configuration
 {
@@ -20,7 +21,7 @@ namespace FloridSword.SystemService.Configuration
 
         public void Save(Settings settings)
         {
-            var settingsJson = settings.ToJson();
+            var settingsJson = settings.ToJson().IndentJson();
             File.WriteAllText(ConfigPath, settingsJson);
         }
 

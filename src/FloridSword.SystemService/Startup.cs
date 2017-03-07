@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceStack;
+using ServiceStack.Text;
 using Autofac;
 using System;
 using Autofac.Extensions.DependencyInjection;
@@ -15,6 +16,11 @@ namespace FloridSword.SystemService
 {
     public class Startup
     {
+        static Startup()
+        {
+            JsConfig.EmitCamelCaseNames = true;
+        }
+
         public Startup(IHostingEnvironment env)
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
