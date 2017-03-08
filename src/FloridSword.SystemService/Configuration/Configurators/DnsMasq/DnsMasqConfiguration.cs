@@ -8,10 +8,16 @@ namespace FloridSword.SystemService.Configuration.Configurators.DnsMasq
     {
         protected override string GetFileName() => "20-florid_sword";
         public List<DhcpRange> DhcpRanges { get; set; } = new List<DhcpRange>();
+        public List<string> Interfaces { get; set; } = new List<string>();
 
         public override string ToString()
         {
             StringBuilder configBuilder = new StringBuilder();
+
+            foreach (string networkInterface in Interfaces)
+            {
+                configBuilder.AppendLine($"interface={networkInterface}");
+            }
 
             foreach (DhcpRange dhcpRange in DhcpRanges)
             {
@@ -19,6 +25,11 @@ namespace FloridSword.SystemService.Configuration.Configurators.DnsMasq
             }
 
             return configBuilder.ToString();
+        }
+
+        public void AddInterface(string networkInterface)
+        {
+            Interfaces.Add(networkInterface);
         }
 
         public void AddDhcpRange(string networkInterface, string startAddress, string endAddress, TimeSpan leaseTime)

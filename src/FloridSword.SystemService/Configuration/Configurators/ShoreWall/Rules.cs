@@ -8,7 +8,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
     {
         public List<RuleEntry> RuleEntries { get; set; } = new List<RuleEntry>();
 
-        public void Add(Section section, string action, string source, string dest, string protocol)
+        public void Add(Section section, string action, string source, string dest, string protocol = null)
         {
             RuleEntries.Add(new RuleEntry
             {

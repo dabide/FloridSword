@@ -50,9 +50,13 @@ namespace FloridSword.SystemService.Configuration
             shoreWallConfiguration.Interfaces.Add("net", "eth0", true);
             shoreWallConfiguration.Interfaces.Add("lan", "eth1", false);
             shoreWallConfiguration.Policy.Add("lan", "net", PolicyType.Accept);
-            shoreWallConfiguration.Policy.Add("net", "all", PolicyType.Drop, LogLevel.Info);
+            shoreWallConfiguration.Policy.Add("$FW", "all", PolicyType.Accept);
+            shoreWallConfiguration.Policy.Add("net", "all", PolicyType.Drop);
+            shoreWallConfiguration.Rules.Add(Section.New, "SSH(ACCEPT)", "lan", "$FW");
+            shoreWallConfiguration.Rules.Add(Section.New, "DNS(ACCEPT)", "lan", "$FW");
             shoreWallConfiguration.Masq.Add("eth0", "10.0.0.0/8,169.254.0.0/16,172.16.0.0/12,192.168.0.0/16");
 
+            settings.DnsMasqConfiguration.AddInterface("eth1");
             settings.DnsMasqConfiguration.AddDhcpRange("eth1", "192.168.1.100", "192.168.1.199", TimeSpan.FromHours(12));
 
             return settings;

@@ -8,7 +8,6 @@ namespace FloridSword.SystemService.Configuration
         public ShoreWallConfiguration ShoreWallConfiguration { get; set; } = new ShoreWallConfiguration();
         public DnsMasqConfiguration DnsMasqConfiguration { get; set; } = new DnsMasqConfiguration();
 
-
         public static Settings Instance { get; set; } = new Settings();
     }
 }
