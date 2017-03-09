@@ -15,6 +15,7 @@ namespace FloridSword.SystemService.Configuration.Configurators.ShoreWall
                 Section = section,
                 Action = action,
                 Source = source,
+                Dest = dest,
                 Proto = protocol
             });    
         }

@@ -16,10 +16,10 @@ namespace FloridSword.SystemService.Configuration.Configurators.DnsMasq
         {
             configuration.Write("/etc/dnsmasq.d");
 
-            var processResult = _processTool.Execute("/usr/sbin/service", "dnsmasq reload");
+            var processResult = _processTool.Execute("/usr/sbin/service", "dnsmasq restart");
             if (processResult.ExitCode != 0)
             {
-                throw new Exception("Couldn't reload dnsmasq configuration");
+                throw new Exception("Couldn't restart dnsmasq");
             }
         }
     }
