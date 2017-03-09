@@ -3,7 +3,7 @@ cd /opt/floridsword/setup
 
 dpkg -l puppetlabs-release-pc1 > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-    wget -O /tmp/puppetlabs.deb https://apt.puppetlabs.com/puppetlabs-release-pc1-jessie.deb
+    wget -O /tmp/puppetlabs.deb https://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb
     sudo dpkg -i /tmp/puppetlabs.deb
     rm /tmp/puppetlabs.deb
 fi
@@ -16,6 +16,8 @@ if [ $? -ne 0 ]; then
 fi
 
 /opt/puppetlabs/bin/puppet module install saz-dnsmasq
+/opt/puppetlabs/bin/puppet module install puppetlabs-apt
+/opt/puppetlabs/bin/puppet module install puppet-unattended_upgrades
 
 if [ "$1" != "--skip-puppet" ]; then
     /opt/puppetlabs/bin/puppet apply --color=no --debug --verbose \

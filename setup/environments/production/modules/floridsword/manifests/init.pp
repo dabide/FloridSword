@@ -2,6 +2,17 @@
 #
 #
 class floridsword {
+    apt::source { 'dotnet_release':
+        comment      => '.NET Core Tools',
+        location     => 'https://apt-mo.trafficmanager.net/repos/dotnet-release/',
+        repos        => 'main',
+        architecture => 'amd64',
+        key          => {
+            'id'     => '417A0893',
+            'server' => 'keyserver.ubuntu.com'  
+        },
+    }
+
     package { 'ipset':
         ensure => installed,        
     }
@@ -10,35 +21,20 @@ class floridsword {
         ensure => installed,
     }
 
+    package { 'dotnet-dev-1.0.1':
+        ensure  => installed,
+        require => [ Apt::Source['dotnet_release' ] ],
+    }
+
     dnsmasq::conf { 'base_config':
         ensure => present,
         source => 'puppet:///modules/floridsword/base-config',
     }
 
-    package { 'curl':
-        ensure => installed,        
-    }
-
-    package { 'libunwind8':
-        ensure => installed,        
-    }
-
-    package { 'gettext':
-        ensure => installed,        
-    }
-
-    file { '/opt/dotnet':
-        ensure => directory,
-    }
-    ->
-    exec { 'install_dotnet':
-        command => "/usr/bin/curl -sSL https://go.microsoft.com/fwlink/?linkid=843453 | /bin/tar zx -C /opt/dotnet",
-        creates => "/opt/dotnet/sdk/1.0.1",
-        require => [ Package['curl'], Package['libunwind8'], Package['gettext'] ],
-    }
-    ->
-    file { '/usr/local/bin/dotnet':
-        ensure => link,
-        target => '/opt/dotnet/dotnet',
+    class { 'unattended_upgrades':
+        auto => {
+            'reboot'      => true,
+            'reboot_time' => '03:00',
+        },
     }
 }
