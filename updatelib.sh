@@ -55,16 +55,13 @@ touch "${LIB}/packages/PLACEHOLDER"
 
 for d in ServiceStack.Text
 do
-	if [ ! -d "${LIB}/src/${d}" ]; then
-		echo "Cloning ${d} repo"
-		git clone --depth 1 --branch ${TAG} https://github.com/ServiceStack/${d} "${LIB}/src/${d}"
+	if [ -d "${LIB}/src/${d}" ]; then
+		echo "Deleting ${d} repo"
+		rm -rf "${LIB}/src/${d}"
 	fi
 
-	pushd "${LIB}/src/${d}"
-    git checkout -- .
-    git fetch origin
-    git reset --hard ${TAG}
-    popd
+    echo "Cloning ${d} repo"
+    git clone --depth 1 --branch ${TAG} https://github.com/ServiceStack/${d} "${LIB}/src/${d}"
 
     pack "${LIB}/src/${d}" ServiceStack.Text ${PATCHVERSION}
 done
