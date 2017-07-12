@@ -14,7 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.0" />
-    <PackageReference Include="ServiceStack" Version="111.0.37" />
+    <PackageReference Include="ServiceStack.Core" Version="1.0.43" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.17359" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
   </ItemGroup>

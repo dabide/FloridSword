@@ -10,21 +10,22 @@ errorhandler() {
 }
 
 pack() {
-    echo "Building $2"
-	pushd "$1/src/$2"
-	${DOTNET} restore $2.csproj
-	${DOTNET} pack $2.csproj -o "${LIB}/packages" -c Release /property:PackageVersion=$3
-	popd
+    trap errorhandler ERR
+
+    echo "Building $2 at patch version $3"
+    dotnet restore $1/src/$2.Core.sln
+    pushd "$1/build"
+    sed -i -e "s/__releaseDate = new DateTime/__releaseDate = new  DateTime/" $1/src/$2/Env.cs
+	BUILD_NUMBER=$3 "${MSBUILD}" build-core.proj /target:NuGetPack /property:Configuration=Release    
+ 	popd
+    mv $1/NuGet.Core/*.nupkg ${LIB}/packages
 }
 
+MSBUILD="/c/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SSVERSION=111.0.38
 LIB=${DIR}/lib
-SSDIR=${LIB}/src/ServiceStack
-SSAWSDIR=${LIB}/src/ServiceStack.Aws
-SSTEXTDIR=${LIB}/src/ServiceStack.Text
-SSREDISDIR=${LIB}/src/ServiceStack.Redis
-ORMLITEDIR=${LIB}/src/ServiceStack.OrmLite
+PATCHVERSION=$(($(printf '%(%s)T' -1) / 86400))
+TAG=v4.5.12
 
 if [ "${OS}" == 'Windows_NT' ]; then
     DOTNET="${DIR}/bin/dotnet-core/dotnet.exe"
@@ -49,46 +50,23 @@ trap errorhandler ERR
 
 echo "Cleaning up"
 rm -rf "${LIB}/packages"
+mkdir -p "${LIB}/packages"
 touch "${LIB}/packages/PLACEHOLDER"
-
-for d in ServiceStack ServiceStack.Aws ServiceStack.OrmLite ServiceStack.Redis ServiceStack.Text
-do
-	if [ ! -d "${LIB}/src/${d}" ]; then
-		echo "Cloning ${d} repo"
-		git clone --depth 1 https://github.com/ServiceStack/${d} "${LIB}/src/${d}"
-	fi
-
-	pushd "${LIB}/src/${d}"
-	git clean -df
-	git checkout -- .
-	git fetch
-	git checkout master
-	popd
-done
 
 for d in ServiceStack.Text
 do
-	pack ${SSTEXTDIR} ${d} ${SSVERSION}
-done
+	if [ ! -d "${LIB}/src/${d}" ]; then
+		echo "Cloning ${d} repo"
+		git clone --depth 1 --branch ${TAG} https://github.com/ServiceStack/${d} "${LIB}/src/${d}"
+	fi
 
-for d in ServiceStack.Aws
-do
-	pack ${SSAWSDIR} ${d} ${SSVERSION}
-done
+	pushd "${LIB}/src/${d}"
+    git checkout -- .
+    git fetch origin
+    git reset --hard ${TAG}
+    popd
 
-for d in ServiceStack.OrmLite ServiceStack.OrmLite.Sqlite ServiceStack.OrmLite.SqlServer
-do 
-	pack ${ORMLITEDIR} ${d} ${SSVERSION}
-done
-
-for d in ServiceStack.Redis
-do
-	pack ${SSREDISDIR} ${d} ${SSVERSION}
-done
-
-for d in ServiceStack ServiceStack.Api.Swagger ServiceStack.Client ServiceStack.Common ServiceStack.Core.SelfHost ServiceStack.Core.WebApp ServiceStack.HttpClient ServiceStack.Interfaces ServiceStack.Kestrel ServiceStack.MsgPack ServiceStack.Mvc ServiceStack.ProtoBuf ServiceStack.RabbitMq ServiceStack.Server ServiceStack.Wire
-do
-	pack ${SSDIR} ${d} ${SSVERSION}
+    pack "${LIB}/src/${d}" ServiceStack.Text ${PATCHVERSION}
 done
 
 echo "Finished succesfully"
